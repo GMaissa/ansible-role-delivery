@@ -1,0 +1,23 @@
+---
+# Login of the delivery user the create
+delivery_user_login: deliveryboy
+
+# Delivery user main group
+delivery_user_group: www-data
+
+# Public keys files to add to delivery user authorized keys
+delivery_user_public_keys_files: [ ~/.ssh/id_rsa.pub ]
+
+# Public keys add to delivery user authorized keys
+delivery_user_public_keys_strings: []
+
+# Directories to be owned by delivery user
+delivery_user_directories: []
+
+# List of sudoers config to install
+# Configuration exemple :
+# delivery_sudoers_configs:
+#   -
+#     name: test
+#     template: sudoers.j2
+delivery_sudoers_configs: []

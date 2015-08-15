@@ -1,0 +1,28 @@
+---
+- name: Create "{{ delivery_user_login }}" user
+  user: name={{ delivery_user_login }} shell=/bin/bash comment="Delivery account" group={{ delivery_user_group }} append=yes
+
+- name: Authorizing ssh keys
+  authorized_key: user={{ delivery_user_login }} key="{{ lookup('file', item ) }}"
+  with_items: delivery_user_public_keys_files
+  when: delivery_user_public_keys_files | length > 0
+
+- name: Authorizing ssh keys
+  authorized_key: user={{ delivery_user_login }} key="{{ item }}"
+  with_items: delivery_user_public_keys_strings
+  when: delivery_user_public_keys_strings | length > 0
+
+- name: Make it owner of the project sources
+  file: path={{ item }}
+        owner={{ delivery_user_login }}
+        group={{ delivery_user_group }}
+        state=directory
+        mode=0755
+        recurse=yes
+  with_items: delivery_user_directories
+  when: delivery_user_directories | length > 0
+
+- name: Create sudoers config for eZ Publish
+  template: src={{item.template}} dest=/etc/sudoers.d/{{ item.name }} mode=0755
+  with_items: delivery_sudoers_configs
+  when: delivery_sudoers_configs | length > 0
